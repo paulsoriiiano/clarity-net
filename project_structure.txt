@@ -1,0 +1,116 @@
+clarity-net/
+│
+├── README.md                          # Project overview, setup instructions, results summary
+├── requirements.txt                   # Python dependencies
+├── .gitignore                         # Ignore data/, checkpoints/, outputs/, etc.
+├── LICENSE                            # MIT or your preferred license
+│
+├── data/                              # Data directory (add to .gitignore)
+│   ├── raw/                           # Raw DNS Challenge data
+│   │   ├── clean_speech/              # Clean speech clips
+│   │   └── noise/                     # Noise clips organized by type
+│   │       ├── background_music/
+│   │       ├── factory/
+│   │       ├── street_traffic/
+│   │       ├── cafeteria/
+│   │       ├── wind/
+│   │       └── music_interference/
+│   │
+│   └── processed/                     # Generated paired spectrograms
+│       ├── seen/                      # Training data (seen noise types)
+│       │   ├── pair_0000_noisy_mag.npy
+│       │   ├── pair_0000_clean_mag.npy
+│       │   ├── pair_0000_noisy_phase.npy
+│       │   └── ...
+│       └── unseen/                    # Test data (unseen noise types)
+│           └── ...
+│
+├── src/                               # Source code
+│   ├── __init__.py
+│   │
+│   ├── data/                          # Data processing modules
+│   │   ├── __init__.py
+│   │   ├── audio_utils.py             # Load, resample, slice audio
+│   │   ├── spectrogram.py             # STFT/iSTFT operations
+│   │   ├── dataset.py                 # PyTorch Dataset class
+│   │   └── generate_pairs.py          # Script to generate paired data
+│   │
+│   ├── models/                        # Model architectures
+│   │   ├── __init__.py
+│   │   ├── baseline_cnn.py            # Simple U-Net baseline
+│   │   ├── deepfilternet.py           # DeepFilterNet implementation/wrapper
+│   │   └── dccrn.py                   # DCCRN implementation/wrapper
+│   │
+│   ├── training/                      # Training logic
+│   │   ├── __init__.py
+│   │   ├── trainer.py                 # Main training loop
+│   │   ├── losses.py                  # Loss functions (MSE, perceptual, etc.)
+│   │   └── augmentation.py            # Data augmentation strategies
+│   │
+│   ├── evaluation/                    # Evaluation and metrics
+│   │   ├── __init__.py
+│   │   ├── metrics.py                 # PESQ, STOI, SI-SNR wrappers
+│   │   └── evaluate.py                # Evaluation script for trained models
+│   │
+│   └── inference/                     # Inference and demo
+│       ├── __init__.py
+│       ├── denoise.py                 # Single-file denoising script
+│       └── realtime_demo.py           # Real-time microphone demo
+│
+├── configs/                           # Configuration files (YAML or Python)
+│   ├── base_config.yaml               # Base hyperparameters
+│   ├── baseline_cnn.yaml              # CNN-specific config
+│   ├── deepfilternet.yaml             # DeepFilterNet config
+│   ├── dccrn.yaml                     # DCCRN config
+│   ├── ablation_augmentation.yaml     # Spectral augmentation ablation
+│   └── ablation_curriculum.yaml       # Curriculum learning ablation
+│
+├── scripts/                           # Standalone scripts for one-off tasks
+│   ├── download_dns.sh                # Download DNS Challenge dataset
+│   ├── prepare_dataset.py             # Run full data generation pipeline
+│   ├── train.py                       # Main training script (reads from configs/)
+│   └── evaluate_all.py                # Batch evaluation across all models
+│
+├── checkpoints/                       # Saved model weights (add to .gitignore)
+│   ├── baseline_cnn/
+│   │   └── best_model.pth
+│   ├── deepfilternet/
+│   │   └── best_model.pth
+│   └── dccrn/
+│       └── best_model.pth
+│
+├── results/                           # Evaluation outputs (add to .gitignore)
+│   ├── metrics/                       # CSV files with PESQ/STOI/SI-SNR per model
+│   │   ├── baseline_cnn_results.csv
+│   │   ├── deepfilternet_results.csv
+│   │   └── dccrn_results.csv
+│   │
+│   ├── audio_samples/                 # Enhanced audio samples for qualitative eval
+│   │   ├── seen_noise/
+│   │   │   ├── traffic_sample_noisy.wav
+│   │   │   ├── traffic_sample_enhanced.wav
+│   │   │   └── traffic_sample_clean.wav
+│   │   └── unseen_noise/
+│   │       └── ...
+│   │
+│   └── visualizations/                # Plots and figures for report
+│       ├── generalization_gap.png     # Seen vs unseen performance
+│       ├── ablation_comparison.png    # Impact of training strategies
+│       └── spectrogram_examples.png   # Visual comparisons
+│
+├── notebooks/                         # Jupyter notebooks for exploration
+│   ├── 01_data_exploration.ipynb      # Visualize dataset, check SNR distribution
+│   ├── 02_baseline_training.ipynb     # Quick baseline training experiment
+│   └── 03_results_analysis.ipynb      # Generate plots and tables for report
+│
+├── docs/                              # Documentation and report materials
+│   ├── proposal.pdf                   # 1-page proposal
+│   ├── final_report.pdf               # Final project report
+│   ├── presentation.pdf               # Class presentation slides
+│   └── demo_video.mp4                 # Demonstration video (or link)
+│
+└── tests/                             # Unit tests (optional but good practice)
+    ├── __init__.py
+    ├── test_audio_utils.py            # Test audio loading/slicing
+    ├── test_spectrogram.py            # Test STFT/iSTFT correctness
+    └── test_metrics.py                # Verify PESQ/STOI implementations
