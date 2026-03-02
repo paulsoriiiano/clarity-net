@@ -106,7 +106,7 @@ Results reported separately by noise type to isolate generalization success/fail
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone the repository
-git clone https://github.com/yourusername/clarity-net.git
+git clone https://github.com/paulsoriiiano/clarity-net.git
 cd clarity-net
 
 # Create virtual environment and install dependencies
@@ -118,7 +118,7 @@ uv pip install -r requirements.txt
 **Option 2: Using `pip` (standard)**
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/clarity-net.git
+git clone https://github.com/paulsoriiiano/clarity-net.git
 cd clarity-net
 
 # Create virtual environment
@@ -238,12 +238,12 @@ Full results breakdown by noise type coming soon.
 If you use this code or methodology in your research, please cite:
 
 ```
-@misc{speech-enhancement-generalization,
-  author = {Your Name},
-  title = {Cross-Domain Generalization in Speech Enhancement},
-  year = {2025},
+@misc{ClarityNet,
+  author = {Paul Junver Soriano},
+  title = {ClarityNet: Cross-Domain Generalization in Speech Enhancement},
+  year = {2026},
   publisher = {GitHub},
-  url = {https://github.com/yourusername/speech-enhancement-generalization}
+  url = {https://github.com/paulsoriiiano/clarity-net}
 }
 ```
 
@@ -267,9 +267,9 @@ MIT License — see `LICENSE` file for details.
 ## 📧 Contact
 
 **Your Name**  
-Email: your.email@example.com  
-LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
+Email: pauljunversoriano@gmail.com 
+LinkedIn: [Paul Junver Soriano](https://linkedin.com/in/paul-junver-soriano)
 
 ---
 
-**Status:** 🚧 Work in Progress — Fall 2025
+**Status:** 🚧 Work in Progress — Spring 2026
