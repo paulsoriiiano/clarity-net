@@ -1,0 +1,24 @@
+[project]
+name = "clarity-net"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "librosa>=0.11.0",
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.3",
+    "pandas>=3.0.1",
+    "pesq>=0.0.4",
+    "pyaudio>=0.2.14",
+    "pystoi>=0.4.1",
+    "pyyaml>=6.0.3",
+    "scipy>=1.17.1",
+    "seaborn>=0.13.2",
+    "sounddevice>=0.5.5",
+    "soundfile>=0.13.1",
+    "tensorboard>=2.20.0",
+    "torch>=2.10.0",
+    "torchaudio>=2.10.0",
+    "tqdm>=4.67.3",
+]
