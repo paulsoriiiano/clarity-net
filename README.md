@@ -6,6 +6,17 @@ A deep learning project investigating how well speech enhancement models general
 
 ---
 
+**Status:** 🚧 
+- Generated dataset
+- Working on preprocessing
+
+**Next Steps:**
+- Validate pipeline with a vanilla CNN model
+- Perform initial training and evaluation for both models to compare baseline performance
+- Perform ablation studies for selected model
+
+---
+
 ## 📋 Overview
 
 Most speech enhancement systems are trained and tested on the same noise distribution, leaving their real-world robustness unexplored. This project systematically measures the **generalization gap** between seen and unseen noise conditions and evaluates training strategies to close it.
@@ -270,6 +281,3 @@ MIT License — see `LICENSE` file for details.
 Email: pauljunversoriano@gmail.com 
 LinkedIn: [Paul Junver Soriano](https://linkedin.com/in/paul-junver-soriano)
 
----
-
-**Status:** 🚧 Work in Progress — Spring 2026
