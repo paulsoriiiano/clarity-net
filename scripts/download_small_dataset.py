@@ -50,10 +50,10 @@ def setup_directories():
     
     CLEAN_DIR.mkdir(parents=True, exist_ok=True)
     (NOISE_DIR / "background_music").mkdir(parents=True, exist_ok=True)
-    (NOISE_DIR / "factory").mkdir(parents=True, exist_ok=True)
-    (NOISE_DIR / "street_traffic").mkdir(parents=True, exist_ok=True)
-    (NOISE_DIR / "cafeteria").mkdir(parents=True, exist_ok=True)
-    (NOISE_DIR / "wind").mkdir(parents=True, exist_ok=True)
+    (NOISE_DIR / "domestic_mechanical").mkdir(parents=True, exist_ok=True)
+    (NOISE_DIR / "natural_continuous").mkdir(parents=True, exist_ok=True)
+    (NOISE_DIR / "transport_urban").mkdir(parents=True, exist_ok=True)
+    (NOISE_DIR / "impulsive_events").mkdir(parents=True, exist_ok=True)
     (NOISE_DIR / "music_interference").mkdir(parents=True, exist_ok=True)
     TMP_DIR.mkdir(parents=True, exist_ok=True)
     
@@ -146,10 +146,13 @@ def organize_noise_files(archive_path: Path):
     # Category mappings (ESC-50 category numbers)
     # Format: our_category -> list of ESC-50 category numbers
     category_map = {
-        "wind": [0, 1, 5, 10, 11],           # rain, sea_waves, wind, crackling_fire, etc.
-        "street_traffic": [20, 21, 24, 40],  # dog, rooster, helicopter, chainsaw
-        "factory": [10, 11, 41, 30],         # fire, crickets, chainsaw, clock_alarm
-        "cafeteria": [36, 38, 39, 19],       # laughing, breathing, coughing, footsteps
+    # SEEN (Training) - Continuous, stationary patterns
+    "natural_continuous": [10, 11, 12, 15, 16, 17, 19],  # rain, sea waves, fire, water drops, wind, pouring water, thunderstorm
+    "domestic_mechanical": [35, 36, 38],                     # washing machine, vacuum cleaner, clock tick
+    
+    # UNSEEN (Testing) - Different acoustic characteristics
+    "transport_urban": [40, 42, 43, 44, 45, 47],         # helicopter, siren, car horn, engine, train, airplane
+    "impulsive_events": [30, 34, 39, 46, 48, 49],        # door knock, can opening, glass breaking, church bells, fireworks, hand saw
     }
     
     # Organize files
@@ -214,11 +217,11 @@ def print_summary():
     print("=" * 50)
     print()
     print("Summary:")
-    print(f"  Clean speech:       {len(list(CLEAN_DIR.glob('*')))} files in {CLEAN_DIR}")
-    print(f"  Wind noise:         {len(list((NOISE_DIR / 'wind').glob('*.wav')))} files")
-    print(f"  Street traffic:     {len(list((NOISE_DIR / 'street_traffic').glob('*.wav')))} files")
-    print(f"  Factory:            {len(list((NOISE_DIR / 'factory').glob('*.wav')))} files")
-    print(f"  Cafeteria:          {len(list((NOISE_DIR / 'cafeteria').glob('*.wav')))} files")
+    print(f"  Clean speech:                     {len(list(CLEAN_DIR.glob('*')))} files in {CLEAN_DIR}")
+    print(f"  Natural Continuous noise:         {len(list((NOISE_DIR / 'natural_continuous').glob('*.wav')))} files")
+    print(f"  Domenstic Mechanical:             {len(list((NOISE_DIR / 'domestic_mechanical').glob('*.wav')))} files")
+    print(f"  Transport Urban:                  {len(list((NOISE_DIR / 'transport_urban').glob('*.wav')))} files")
+    print(f"  Impulsive Events:                 {len(list((NOISE_DIR / 'impulsive_events').glob('*.wav')))} files")
     print()
     print("Next steps:")
     print("  1. Add music files to background_music/ and music_interference/")
