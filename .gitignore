@@ -64,3 +64,6 @@ logs/
 tmp/
 temp/
 *.tmp
+
+# Environments
+.venv
