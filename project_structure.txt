@@ -31,9 +31,8 @@ clarity-net/
 │   ├── data/                          # Data processing modules
 │   │   ├── __init__.py
 │   │   ├── audio_utils.py             # Load, resample, slice audio
-│   │   ├── spectrogram.py             # STFT/iSTFT operations
 │   │   ├── dataset.py                 # PyTorch Dataset class
-│   │   └── generate_pairs.py          # Script to generate paired data
+│   │   └── data_manifest.py           # Script to generate deterministic data split
 │   │
 │   ├── models/                        # Model architectures
 │   │   ├── __init__.py
