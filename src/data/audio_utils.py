@@ -53,3 +53,9 @@ def extract_category_from_filename(filename: str) -> int:
     except (ValueError, IndexError):
         pass
     return None
+
+def reconstruct_audio(magnitude: np.ndarray, phase: np.ndarray) -> np.ndarray:
+    """Reconstruct waveform from magnitude and phase spectrograms."""
+    stft_complex = magnitude * np.exp(1j * phase)
+    audio = librosa.istft(stft_complex, hop_length=HOP_LENGTH, n_fft=N_FFT)
+    return audio
