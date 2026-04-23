@@ -2,7 +2,7 @@ import json
 import random
 from pathlib import Path
 
-from audio_utils import (
+from src.data.audio_utils import (
     load_audio,
     slice_audio,
     extract_category_from_filename,
