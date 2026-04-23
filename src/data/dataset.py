@@ -1,18 +1,22 @@
 import json
 from pathlib import Path
 
+import soundfile as sf
 import torch
 from torch.utils.data import Dataset
 
-from audio_utils import mix_at_snr, load_audio, slice_audio
+from src.data.audio_utils import mix_at_snr, load_audio, slice_audio
 
 class WaveformDataset(Dataset):
-    def __init__(self, manifest_path, split, root_dir="."):
+    def __init__(self, manifest_path, split, root_dir=None):
         with open(manifest_path, "r") as f:
             manifest = json.load(f)
 
         self.records = manifest["splits"][split]
-        self.root_dir = Path(root_dir)
+        if root_dir is None:
+            self.root_dir = Path("../../")
+        else:
+            self.root_dir = Path(root_dir)
         self.sample_rate = manifest["audio_config"]["sample_rate"]
         self.segment_length = manifest["audio_config"]["segment_samples"]
 
