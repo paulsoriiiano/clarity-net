@@ -10,20 +10,13 @@ clarity-net/
 │   │   ├── clean_speech/              # Clean speech clips
 │   │   └── noise/                     # Noise clips organized by type
 │   │       ├── background_music/
-│   │       ├── factory/
-│   │       ├── street_traffic/
-│   │       ├── cafeteria/
-│   │       ├── wind/
+│   │       ├── domestic_mechanical/
+│   │       ├── impulsive_events/
+│   │       ├── natural continuous/
+│   │       ├── transport_urban/
 │   │       └── music_interference/
 │   │
-│   └── processed/                     # Generated paired spectrograms
-│       ├── seen/                      # Training data (seen noise types)
-│       │   ├── pair_0000_noisy_mag.npy
-│       │   ├── pair_0000_clean_mag.npy
-│       │   ├── pair_0000_noisy_phase.npy
-│       │   └── ...
-│       └── unseen/                    # Test data (unseen noise types)
-│           └── ...
+│   └── MANIFEST.json                  # MANIFEST file to ensure dataset reproducibility (not included in .gitignore)
 │
 ├── src/                               # Source code
 │   ├── __init__.py
@@ -31,8 +24,8 @@ clarity-net/
 │   ├── data/                          # Data processing modules
 │   │   ├── __init__.py
 │   │   ├── audio_utils.py             # Load, resample, slice audio
-│   │   ├── dataset.py                 # PyTorch Dataset class
-│   │   └── data_manifest.py           # Script to generate deterministic data split
+│   │   ├── dataset.py                 # Custom PyTorch Dataset class
+│   │   └── manifest.py           # Script to generate deterministic data split
 │   │
 │   ├── models/                        # Model architectures
 │   │   ├── __init__.py
@@ -48,8 +41,9 @@ clarity-net/
 │   │
 │   ├── evaluation/                    # Evaluation and metrics
 │   │   ├── __init__.py
+│   │   ├── evaluate.py                # Evaluation script for trained models
 │   │   ├── metrics.py                 # PESQ, STOI, SI-SNR wrappers
-│   │   └── evaluate.py                # Evaluation script for trained models
+│   │   └── visualize.py                # Visualization functions for evaluation
 │   │
 │   └── inference/                     # Inference and demo
 │       ├── __init__.py
@@ -98,9 +92,10 @@ clarity-net/
 │       └── spectrogram_examples.png   # Visual comparisons
 │
 ├── notebooks/                         # Jupyter notebooks for exploration
-│   ├── 01_data_exploration.ipynb      # Visualize dataset, check SNR distribution
-│   ├── 02_baseline_training.ipynb     # Quick baseline training experiment
-│   └── 03_results_analysis.ipynb      # Generate plots and tables for report
+│   ├── 01_data_preparation.ipynb      # Visualize dataset, check SNR distribution
+│   ├── 02_train_val_test_split.ipynb  # Ensure train/test/validation is deterministic
+│   ├── 03_baseline_cnn_training.ipynb # Quick baseline training experiment
+│   └── 04_dccrn_training.ipynb      # DCCRN training experiment
 │
 ├── docs/                              # Documentation and report materials
 │   ├── proposal.pdf                   # 1-page proposal
