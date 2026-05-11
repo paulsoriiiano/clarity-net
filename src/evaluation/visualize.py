@@ -12,79 +12,124 @@ import IPython.display as ipd
 from src.data.audio_utils import SAMPLE_RATE
 
 def plot_loss_curves(history, results_dir):
-    """Plot training and validation loss curves."""
+    """Plot training/validation loss, PESQ, STOI, SI-SNR, and generalization gaps."""
     # # Load history
     # with open(results_dir / 'training_history.json') as f:
     #     history = json.load(f)
 
     epochs_range = range(1, len(history['train_loss']) + 1)
+    has_si_snr = all(
+        key in history for key in ['val_seen_si_snr', 'val_unseen_si_snr']
+    )
 
-    # Create 2x2 subplot
-    fig, axes = plt.subplots(2, 2, figsize=(16, 10))
+    if 'generalization_gap_si_snr' in history:
+        si_snr_gap = history['generalization_gap_si_snr']
+    elif has_si_snr:
+        si_snr_gap = [
+            seen - unseen
+            for seen, unseen in zip(history['val_seen_si_snr'], history['val_unseen_si_snr'])
+        ]
+    else:
+        si_snr_gap = None
+
+    # Create subplot layout: 4 metric panels + one wide generalization-gap panel
+    fig = plt.figure(figsize=(16, 14))
+    gs = fig.add_gridspec(3, 2)
+
+    ax_loss = fig.add_subplot(gs[0, 0])
+    ax_pesq = fig.add_subplot(gs[0, 1])
+    ax_stoi = fig.add_subplot(gs[1, 0])
+    ax_si_snr = fig.add_subplot(gs[1, 1])
+    ax_gap = fig.add_subplot(gs[2, :])
 
     # ============================================================================
     # Plot 1: Loss curves
     # ============================================================================
-    axes[0, 0].plot(epochs_range, history['train_loss'], 
-                    label='Train', linewidth=2, color='blue')
-    axes[0, 0].plot(epochs_range, history['val_seen_loss'], 
-                    label='Val (Seen)', linewidth=2, color='orange')
-    axes[0, 0].plot(epochs_range, history['val_unseen_loss'], 
-                    label='Val (Unseen)', linewidth=2, color='green')
-    axes[0, 0].set_xlabel('Epoch', fontsize=12)
-    axes[0, 0].set_ylabel('Loss (MSE)', fontsize=12)
-    axes[0, 0].set_title('Training and Validation Loss', fontsize=14, fontweight='bold')
-    axes[0, 0].legend(fontsize=10)
-    axes[0, 0].grid(True, alpha=0.3)
+    ax_loss.plot(epochs_range, history['train_loss'],
+                 label='Train', linewidth=2, color='blue')
+    ax_loss.plot(epochs_range, history['val_seen_loss'],
+                 label='Val (Seen)', linewidth=2, color='orange')
+    ax_loss.plot(epochs_range, history['val_unseen_loss'],
+                 label='Val (Unseen)', linewidth=2, color='green')
+    ax_loss.set_xlabel('Epoch', fontsize=12)
+    ax_loss.set_ylabel('Loss (MSE)', fontsize=12)
+    ax_loss.set_title('Training and Validation Loss', fontsize=14, fontweight='bold')
+    ax_loss.legend(fontsize=10)
+    ax_loss.grid(True, alpha=0.3)
 
     # ============================================================================
     # Plot 2: PESQ scores
     # ============================================================================
-    axes[0, 1].plot(epochs_range, history['val_seen_pesq'], 
-                    label='Seen', linewidth=2, color='blue')
-    axes[0, 1].plot(epochs_range, history['val_unseen_pesq'], 
-                    label='Unseen', linewidth=2, color='red')
-    axes[0, 1].set_xlabel('Epoch', fontsize=12)
-    axes[0, 1].set_ylabel('PESQ Score', fontsize=12)
-    axes[0, 1].set_title('PESQ (Perceptual Quality)', fontsize=14, fontweight='bold')
-    axes[0, 1].legend(fontsize=10)
-    axes[0, 1].grid(True, alpha=0.3)
-    axes[0, 1].set_ylim([0, 4.5])  # PESQ range is -0.5 to 4.5
+    ax_pesq.plot(epochs_range, history['val_seen_pesq'],
+                 label='Seen', linewidth=2, color='blue')
+    ax_pesq.plot(epochs_range, history['val_unseen_pesq'],
+                 label='Unseen', linewidth=2, color='red')
+    ax_pesq.set_xlabel('Epoch', fontsize=12)
+    ax_pesq.set_ylabel('PESQ Score', fontsize=12)
+    ax_pesq.set_title('PESQ (Perceptual Quality)', fontsize=14, fontweight='bold')
+    ax_pesq.legend(fontsize=10)
+    ax_pesq.grid(True, alpha=0.3)
+    ax_pesq.set_ylim([0, 4.5])  # PESQ range is -0.5 to 4.5
 
     # ============================================================================
     # Plot 3: STOI scores
     # ============================================================================
-    axes[1, 0].plot(epochs_range, history['val_seen_stoi'], 
-                    label='Seen', linewidth=2, color='blue')
-    axes[1, 0].plot(epochs_range, history['val_unseen_stoi'], 
-                    label='Unseen', linewidth=2, color='red')
-    axes[1, 0].set_xlabel('Epoch', fontsize=12)
-    axes[1, 0].set_ylabel('STOI Score', fontsize=12)
-    axes[1, 0].set_title('STOI (Intelligibility)', fontsize=14, fontweight='bold')
-    axes[1, 0].legend(fontsize=10)
-    axes[1, 0].grid(True, alpha=0.3)
-    axes[1, 0].set_ylim([0, 1])  # STOI range is 0 to 1
+    ax_stoi.plot(epochs_range, history['val_seen_stoi'],
+                 label='Seen', linewidth=2, color='blue')
+    ax_stoi.plot(epochs_range, history['val_unseen_stoi'],
+                 label='Unseen', linewidth=2, color='red')
+    ax_stoi.set_xlabel('Epoch', fontsize=12)
+    ax_stoi.set_ylabel('STOI Score', fontsize=12)
+    ax_stoi.set_title('STOI (Intelligibility)', fontsize=14, fontweight='bold')
+    ax_stoi.legend(fontsize=10)
+    ax_stoi.grid(True, alpha=0.3)
+    ax_stoi.set_ylim([0, 1])  # STOI range is 0 to 1
 
     # ============================================================================
-    # Plot 4: Generalization gaps
+    # Plot 4: SI-SNR scores
     # ============================================================================
-    axes[1, 1].plot(epochs_range, history['generalization_gap_pesq'], 
-                    label='PESQ Gap', linewidth=2, color='purple')
-    axes[1, 1].plot(epochs_range, history['generalization_gap_stoi'], 
-                    label='STOI Gap', linewidth=2, color='orange')
-    axes[1, 1].axhline(y=0, color='black', linestyle='--', alpha=0.5, linewidth=1)
-    axes[1, 1].set_xlabel('Epoch', fontsize=12)
-    axes[1, 1].set_ylabel('Gap (Seen - Unseen)', fontsize=12)
-    axes[1, 1].set_title('Generalization Gap Over Training', fontsize=14, fontweight='bold')
-    axes[1, 1].legend(fontsize=10)
-    axes[1, 1].grid(True, alpha=0.3)
+    if has_si_snr:
+        ax_si_snr.plot(epochs_range, history['val_seen_si_snr'],
+                       label='Seen', linewidth=2, color='blue')
+        ax_si_snr.plot(epochs_range, history['val_unseen_si_snr'],
+                       label='Unseen', linewidth=2, color='red')
+        ax_si_snr.set_xlabel('Epoch', fontsize=12)
+        ax_si_snr.set_ylabel('SI-SNR (dB)', fontsize=12)
+        ax_si_snr.set_title('SI-SNR (Scale-Invariant SNR)', fontsize=14, fontweight='bold')
+        ax_si_snr.legend(fontsize=10)
+        ax_si_snr.grid(True, alpha=0.3)
+    else:
+        ax_si_snr.axis('off')
+        ax_si_snr.text(
+            0.5, 0.5,
+            'SI-SNR history not available\nExpected keys:\nval_seen_si_snr\nval_unseen_si_snr',
+            ha='center', va='center', fontsize=12,
+            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.3)
+        )
+
+    # ============================================================================
+    # Plot 5: Generalization gaps
+    # ============================================================================
+    ax_gap.plot(epochs_range, history['generalization_gap_pesq'],
+                label='PESQ Gap', linewidth=2, color='purple')
+    ax_gap.plot(epochs_range, history['generalization_gap_stoi'],
+                label='STOI Gap', linewidth=2, color='orange')
+    if si_snr_gap is not None:
+        ax_gap.plot(epochs_range, si_snr_gap,
+                    label='SI-SNR Gap', linewidth=2, color='teal')
+    ax_gap.axhline(y=0, color='black', linestyle='--', alpha=0.5, linewidth=1)
+    ax_gap.set_xlabel('Epoch', fontsize=12)
+    ax_gap.set_ylabel('Gap (Seen - Unseen)', fontsize=12)
+    ax_gap.set_title('Generalization Gap Over Training', fontsize=14, fontweight='bold')
+    ax_gap.legend(fontsize=10)
+    ax_gap.grid(True, alpha=0.3)
 
     # Add note about gap direction
-    axes[1, 1].text(0.02, 0.98, 
-                    'Positive gap = worse on unseen\nNegative gap = better on unseen',
-                    transform=axes[1, 1].transAxes,
-                    fontsize=9, verticalalignment='top',
-                    bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.3))
+    ax_gap.text(0.02, 0.98,
+                'Positive gap = worse on unseen\nNegative gap = better on unseen',
+                transform=ax_gap.transAxes,
+                fontsize=9, verticalalignment='top',
+                bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.3))
 
     plt.tight_layout()
     plt.savefig(results_dir / 'training_curves_with_metrics.png', dpi=150, bbox_inches='tight')
@@ -108,6 +153,9 @@ def plot_loss_curves(history, results_dir):
     print(f"  PESQ (unseen): {history['val_unseen_pesq'][best_epoch-1]:.3f}")
     print(f"  STOI (seen):   {history['val_seen_stoi'][best_epoch-1]:.3f}")
     print(f"  STOI (unseen): {history['val_unseen_stoi'][best_epoch-1]:.3f}")
+    if has_si_snr:
+        print(f"  SI-SNR (seen): {history['val_seen_si_snr'][best_epoch-1]:.3f} dB")
+        print(f"  SI-SNR (unseen): {history['val_unseen_si_snr'][best_epoch-1]:.3f} dB")
 
     # Final epoch
     final_epoch = len(history['train_loss'])
@@ -118,15 +166,22 @@ def plot_loss_curves(history, results_dir):
     print(f"  PESQ (unseen): {history['val_unseen_pesq'][-1]:.3f}")
     print(f"  STOI (seen):   {history['val_seen_stoi'][-1]:.3f}")
     print(f"  STOI (unseen): {history['val_unseen_stoi'][-1]:.3f}")
+    if has_si_snr:
+        print(f"  SI-SNR (seen): {history['val_seen_si_snr'][-1]:.3f} dB")
+        print(f"  SI-SNR (unseen): {history['val_unseen_si_snr'][-1]:.3f} dB")
 
     # Generalization gaps
     print(f"\nGeneralization Gaps (at best epoch):")
     print(f"  PESQ: {history['generalization_gap_pesq'][best_epoch-1]:+.3f}")
     print(f"  STOI: {history['generalization_gap_stoi'][best_epoch-1]:+.3f}")
+    if si_snr_gap is not None:
+        print(f"  SI-SNR: {si_snr_gap[best_epoch-1]:+.3f} dB")
 
     print(f"\nGeneralization Gaps (at final epoch):")
     print(f"  PESQ: {history['generalization_gap_pesq'][-1]:+.3f}")
     print(f"  STOI: {history['generalization_gap_stoi'][-1]:+.3f}")
+    if si_snr_gap is not None:
+        print(f"  SI-SNR: {si_snr_gap[-1]:+.3f} dB")
 
     print("="*70)
 
@@ -256,8 +311,8 @@ def playback_audio(results_seen, sample_idx=0):
 
 
 def plot_metric_distributions(results_seen, results_unseen, results_dir):
-    """Plot distributions of PESQ and STOI scores."""
-    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    """Plot distributions of PESQ, STOI, and SI-SNR scores."""
+    fig, axes = plt.subplots(1, 3, figsize=(20, 5))
 
     # PESQ distribution
     axes[0].hist(results_seen['pesq_scores'], bins=20, alpha=0.7, label='Seen', color='blue')
@@ -281,9 +336,40 @@ def plot_metric_distributions(results_seen, results_unseen, results_dir):
     axes[1].legend()
     axes[1].grid(True, alpha=0.3)
 
+    # SI-SNR distribution
+    si_snr_seen = results_seen.get('si_snr_scores', [])
+    si_snr_unseen = results_unseen.get('si_snr_scores', [])
+
+    if si_snr_seen or si_snr_unseen:
+        if si_snr_seen:
+            axes[2].hist(si_snr_seen, bins=20, alpha=0.7, label='Seen', color='blue')
+        if si_snr_unseen:
+            axes[2].hist(si_snr_unseen, bins=20, alpha=0.7, label='Unseen', color='red')
+        if 'si_snr_mean' in results_seen:
+            axes[2].axvline(results_seen['si_snr_mean'], color='blue', linestyle='--', linewidth=2)
+        if 'si_snr_mean' in results_unseen:
+            axes[2].axvline(results_unseen['si_snr_mean'], color='red', linestyle='--', linewidth=2)
+        axes[2].set_xlabel('SI-SNR (dB)')
+        axes[2].set_ylabel('Frequency')
+        axes[2].set_title('SI-SNR Distribution', fontweight='bold')
+        axes[2].legend()
+        axes[2].grid(True, alpha=0.3)
+    else:
+        axes[2].axis('off')
+        axes[2].text(
+            0.5, 0.5,
+            'SI-SNR scores not available\nExpected key: si_snr_scores',
+            ha='center', va='center', fontsize=12,
+            bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.3)
+        )
+
     plt.tight_layout()
     plt.savefig(results_dir / 'metric_distributions.png', dpi=150)
     plt.show()
 
     print(f"Metric distributions saved to {results_dir / 'metric_distributions.png'}")
 
+
+def plot_metric_distribution(results_seen, results_unseen, results_dir):
+    """Backward-compatible alias for plot_metric_distributions()."""
+    return plot_metric_distributions(results_seen, results_unseen, results_dir)

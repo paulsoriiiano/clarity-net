@@ -23,15 +23,19 @@ def evaluate_model(model, test_seen_loader, test_unseen_loader, results_dir, dev
     print(f"  MSE:  {results_seen['mse']:.6f}")
     print(f"  PESQ: {results_seen['pesq_mean']:.3f} ± {results_seen['pesq_std']:.3f}")
     print(f"  STOI: {results_seen['stoi_mean']:.3f} ± {results_seen['stoi_std']:.3f}")
+    print(f"  SI-SNR: {results_seen['si_snr_mean']:.3f} ± {results_seen['si_snr_std']:.3f}")
 
     print("\nUNSEEN Noise Types:")
     print(f"  MSE:  {results_unseen['mse']:.6f}")
     print(f"  PESQ: {results_unseen['pesq_mean']:.3f} ± {results_unseen['pesq_std']:.3f}")
     print(f"  STOI: {results_unseen['stoi_mean']:.3f} ± {results_unseen['stoi_std']:.3f}")
+    print(f"  SI-SNR: {results_unseen['si_snr_mean']:.3f} ± {results_unseen['si_snr_std']:.3f}")
 
     print("\nGeneralization Gap:")
     print(f"  PESQ: {results_seen['pesq_mean'] - results_unseen['pesq_mean']:.3f}")
     print(f"  STOI: {results_seen['stoi_mean'] - results_unseen['stoi_mean']:.3f}")
+    print(f"  SI-SNR: {results_seen['si_snr_mean'] - results_unseen['si_snr_mean']:.3f}")
+
 
     # Save results
     results_summary = {
@@ -40,14 +44,18 @@ def evaluate_model(model, test_seen_loader, test_unseen_loader, results_dir, dev
             'pesq_mean': results_seen['pesq_mean'],
             'pesq_std': results_seen['pesq_std'],
             'stoi_mean': results_seen['stoi_mean'],
-            'stoi_std': results_seen['stoi_std']
+            'stoi_std': results_seen['stoi_std'],
+            'si_snr_mean': results_seen['si_snr_mean'],
+            'si_snr_std': results_seen['si_snr_std'],
         },
         'unseen': {
             'mse': results_unseen['mse'],
             'pesq_mean': results_unseen['pesq_mean'],
             'pesq_std': results_unseen['pesq_std'],
             'stoi_mean': results_unseen['stoi_mean'],
-            'stoi_std': results_unseen['stoi_std']
+            'stoi_std': results_unseen['stoi_std'],
+            'si_snr_mean': results_unseen['si_snr_mean'],
+            'si_snr_std': results_unseen['si_snr_std'],
         }
     }
 
