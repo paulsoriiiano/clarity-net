@@ -100,3 +100,36 @@ class UNetCNN(nn.Module):
         enhanced = x * mask
         
         return enhanced
+    
+
+def count_parameters(model):
+    """Count trainable parameters in model."""
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
+if __name__ == "__main__":
+    # Test the model
+    # Create model
+    model = UNetCNN(in_channels=1, base_channels=32)
+    print(f"Model created with {count_parameters(model):,} parameters")
+        
+    # Test multiple sizes to ensure it works
+    test_sizes = [
+        (2, 1, 257, 501),  # Actual STFT size from data
+        (2, 1, 257, 251),  # Alternative size
+        (2, 1, 256, 500),  # Even dimensions
+]
+
+    print("Model Architecture Test")
+    print(f"Total parameters: {count_parameters(model):,}\n")
+        
+    for test_size in test_sizes:
+        x = torch.randn(*test_size)
+            
+        with torch.no_grad():
+            output = model(x).cpu()
+            
+        print(f"Input:  {tuple(x.shape)} -> Output: {tuple(output.shape)}")
+        assert x.shape == output.shape, f"Size mismatch! {x.shape} != {output.shape}"
+        
+        print("\n✓ All tests passed! Output size matches input size exactly.")
