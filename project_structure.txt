@@ -4,6 +4,9 @@ clarity-net/
 ├── requirements.txt                   # Python dependencies
 ├── .gitignore                         # Ignore data/, checkpoints/, outputs/, etc.
 ├── LICENSE                            # MIT or your preferred license
+├── uv.lock                            # uv package manager
+├── pyproject.toml                     # uv package manager
+│
 │
 ├── data/                              # Data directory (add to .gitignore)
 │   ├── raw/                           # Raw DNS Challenge data
@@ -24,26 +27,28 @@ clarity-net/
 │   ├── data/                          # Data processing modules
 │   │   ├── __init__.py
 │   │   ├── audio_utils.py             # Load, resample, slice audio
-│   │   ├── dataset.py                 # Custom PyTorch Dataset class
-│   │   └── manifest.py           # Script to generate deterministic data split
-│   │
-│   ├── models/                        # Model architectures
-│   │   ├── __init__.py
-│   │   ├── baseline_cnn.py            # Simple U-Net baseline
-│   │   ├── deepfilternet.py           # DeepFilterNet implementation/wrapper
-│   │   └── dccrn.py                   # DCCRN implementation/wrapper
-│   │
-│   ├── training/                      # Training logic
-│   │   ├── __init__.py
-│   │   ├── trainer.py                 # Main training loop
-│   │   ├── losses.py                  # Loss functions (MSE, perceptual, etc.)
-│   │   └── augmentation.py            # Data augmentation strategies
+│   │   ├── dataset.py                 # Custom PyTorch Dataset classes
+│   │   └── manifest.py                # Script to generate deterministic data split
 │   │
 │   ├── evaluation/                    # Evaluation and metrics
 │   │   ├── __init__.py
 │   │   ├── evaluate.py                # Evaluation script for trained models
 │   │   ├── metrics.py                 # PESQ, STOI, SI-SNR wrappers
-│   │   └── visualize.py                # Visualization functions for evaluation
+│   │   └── visualize.py               # Visualization functions for evaluation
+│   │
+│   ├── external/                      # Vendored FullSubNet+ implementation
+│   │
+│   ├── models/                        # Model architectures
+│   │   ├── __init__.py
+│   │   ├── baseline_cnn.py            # Simple U-Net baseline
+│   │   ├── dccrn.py                   # DCCRN implementation/wrapper
+│   │   ├── fullsubnet.py              # FullSubNet implementation/wrapper
+│   │   ├── fullsubnet_plus.py         # FullSubNet+ implementation/wrapper
+│   │   └── model_utils.py             # Utility functions
+│   │
+│   ├── training/                      # Training logic
+│   │   ├── __init__.py
+│   │   └── losses.py                  # Loss functions (MSE, perceptual, etc.)
 │   │
 │   └── inference/                     # Inference and demo
 │       ├── __init__.py
@@ -59,10 +64,7 @@ clarity-net/
 │   └── ablation_curriculum.yaml       # Curriculum learning ablation
 │
 ├── scripts/                           # Standalone scripts for one-off tasks
-│   ├── download_dns.sh                # Download DNS Challenge dataset
-│   ├── prepare_dataset.py             # Run full data generation pipeline
-│   ├── train.py                       # Main training script (reads from configs/)
-│   └── evaluate_all.py                # Batch evaluation across all models
+│   └── download_small_dataset.py      # Download LibriSpeech and ESC-50
 │
 ├── checkpoints/                       # Saved model weights (add to .gitignore)
 │   ├── baseline_cnn/
