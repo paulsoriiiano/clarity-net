@@ -56,6 +56,11 @@ def evaluate_model(model, test_seen_loader, test_unseen_loader, results_dir, dev
             'stoi_std': results_unseen['stoi_std'],
             'si_snr_mean': results_unseen['si_snr_mean'],
             'si_snr_std': results_unseen['si_snr_std'],
+        },
+        'generalization_gap': {
+            'pesq': results_seen['pesq_mean'] - results_unseen['pesq_mean'],
+            'stoi': results_seen['stoi_mean'] - results_unseen['stoi_mean'],
+            'si_snr': results_seen['si_snr_mean'] - results_unseen['si_snr_mean'],
         }
     }
 
