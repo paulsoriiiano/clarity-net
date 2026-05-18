@@ -40,13 +40,23 @@ clarity-net/
 │       ├── __init__.py
 │       └── losses.py                  # Loss functions (MSE, SI-SNR, combined, etc.)
 │
-├── configs/                           # FullSubNet configuration files (YAML)
+├── configs/                           # Model configuration files (YAML)
 │   ├── fullsubnet_mag_l1.yaml         # Magnitude L1 loss
 │   ├── fullsubnet_mag_mse.yaml        # Magnitude MSE loss
 │   ├── fullsubnet_wav_l1.yaml         # Waveform L1 loss
 │   ├── fullsubnet_sisnr.yaml          # SI-SNR loss
 │   ├── fullsubnet_mag_l1_sisnr.yaml   # Combined Magnitude L1 + SI-SNR loss
-│   └── fullsubnet_complex_mse.yaml    # Complex MSE loss
+│   ├── fullsubnet_complex_mse.yaml    # Complex MSE loss
+│   ├── architecture_ablations/        # Architecture ablation study configs
+│   │   ├── fullsubnet_lstm.yaml       # LSTM sequence model
+│   │   ├── fullsubnet_gru.yaml        # GRU sequence model
+│   │   ├── fullsubnet_dp_00.yaml      # Dropout 0.0
+│   │   ├── fullsubnet_dp_01.yaml      # Dropout 0.1
+│   │   ├── fullsubnet_dp_02.yaml      # Dropout 0.2
+│   │   ├── fullsubnet_offline_laplace.yaml      # Offline Laplace normalization
+│   │   ├── fullsubnet_cumulative_laplace.yaml   # Cumulative Laplace normalization
+│   │   └── fullsubnet_offline_gaussian.yaml     # Offline Gaussian normalization
+│   └── loss_ablations/                # Loss function ablation study configs
 │
 ├── scripts/                           # Standalone scripts for one-off tasks
 │   └── download_small_dataset.py      # Download LibriSpeech and ESC-50
@@ -73,11 +83,19 @@ clarity-net/
 │   ├── dccrn_si_snr_eval/             # DCCRN SI-SNR evaluation results
 │   ├── fullsubnet/                    # FullSubNet results
 │   ├── fullsubnet_expand_eval/        # FullSubNet expanded evaluation results
-│   ├── fullsubnet_loss_ablation/      # FullSubNet loss function ablation results
+│   ├── fullsubnet_architecture_ablation_1/  # Architecture ablation 1 results (Sequence Model)
+│   │   └── {experiment_name}/         # Per-experiment results
+│   ├── fullsubnet_architecture_ablation_2/  # Architecture ablation 2 results (Dropout)
+│   │   └── {experiment_name}/         # Per-experiment results
+│   ├── fullsubnet_architecture_ablation_3/  # Architecture ablation 3 results (Normalization)
+│   │   └── {experiment_name}/         # Per-experiment results
+│   ├── fullsubnet_loss_ablation/      # Loss function ablation results
+│   │   └── {experiment_name}/         # Per-experiment results
 │   ├── fullsubnet_plus/               # FullSubNet+ results
 │   ├── fullsubnet_plus_si_snr_eval/   # FullSubNet+ SI-SNR evaluation results
 │   ├── fullsubnet_si_snr_eval/        # FullSubNet SI-SNR evaluation results
-│   └── sweeps/                        # Hyperparameter sweep results
+│   ├── sweeps/                        # Hyperparameter sweep results
+│   └── sweep_results.csv              # Results from hyperparameter sweep
 │
 ├── notebooks/                         # Jupyter notebooks for exploration and experiments
 │   ├── 01_data_preparation.ipynb      # Dataset visualization and SNR distribution analysis
@@ -88,10 +106,17 @@ clarity-net/
 │   ├── 04_fullsubnet_plus_training.ipynb # FullSubNet+ model training
 │   ├── 05_prelim_hyparams_sweep.ipynb # Preliminary hyperparameter sweep
 │   ├── 05_prelim_results.ipynb        # Preliminary results analysis
-│   ├── 06_architecture_ablation.ipynb # Architecture ablation study (LSTM/GRU, dropout, norm)
-│   └── sweep_results.csv              # Results from hyperparameter sweep
+│   ├── 06_architecture_ablation.ipynb # Architecture ablation study (LSTM/GRU, dropout, normalization)
+│   └── 06_loss_ablation.ipynb         # Loss function ablation study
 ├── plots/                             # Visualization outputs
+│   ├── architecture_ablation_1/        # Architecture ablation 1 plots (Sequence Model)
+│   │   └── {experiment_name}/         # Per-experiment training curves
+│   ├── architecture_ablation_2/        # Architecture ablation 2 plots (Dropout)
+│   │   └── {experiment_name}/         # Per-experiment training curves
+│   ├── architecture_ablation_3/        # Architecture ablation 3 plots (Normalization)
+│   │   └── {experiment_name}/         # Per-experiment training curves
 │   ├── loss_ablation/                 # Loss function ablation study plots
+│   │   └── {experiment_name}/         # Per-experiment training curves
 │   └── model_comparison/              # Model comparison visualizations
 │
 
