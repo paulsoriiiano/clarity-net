@@ -357,8 +357,13 @@ class SubbandModel(BaseModel):
                 self.fb_num_neighbor_freqs[idx],
             )
 
-            sb_input = torch.cat([noisy_sb, fb_sb], dim=-2)  # concat on F_sub axis
+            sb_input = torch.cat([noisy_sb, fb_sb], dim=-2)  # concat on F_sub axis [B, N, C, F_sub, T]
+            
+            # Normalize: reshape from [B, N, C, F_sub, T] to [B*N, C, F_sub, T] for normalization
+            B, N, C, F_sub, T = sb_input.shape
+            sb_input = sb_input.reshape(B * N, C, F_sub, T)
             sb_input = self.norm(sb_input)
+            sb_input = sb_input.reshape(B, N, C, F_sub, T)
 
             sb_out = sb_model(sb_input)  # [B, 2, F_section, T]
             subband_outputs.append(sb_out)
