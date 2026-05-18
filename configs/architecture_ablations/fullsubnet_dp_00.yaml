@@ -1,0 +1,36 @@
+experiment_name: dropout_00
+seed: 42
+
+data:
+  snr_range: [-5, 20]
+  augmentation_factor: 5
+  eval_pairs: 3
+  
+
+model:
+  n_fft: 512
+  hop_length: 128
+  win_length: 512
+  num_freqs: 257
+  freq_cutoffs: [16, 96]
+  sb_num_center_freqs: [1, 4, 8]
+  sb_num_neighbor_freqs: [7, 7, 7]
+  fb_num_center_freqs: [1, 4, 8]
+  fb_num_neighbor_freqs: [7, 7, 7]
+  fb_hidden_size: 512
+  sb_hidden_size: 384
+  sequence_model: LSTM
+  dropout: 0.0
+  fb_output_activate_function: false
+  sb_output_activate_function: false
+  norm_type: offline_laplace_norm
+
+training:
+  batch_size: 8
+  learning_rate: 3.0e-4
+  epochs: 50
+  patience: 10
+  weight_decay: 1.0e-5
+
+loss:
+  name: sisnr
