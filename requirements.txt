@@ -27,6 +27,10 @@ tqdm>=4.65.0
 sounddevice>=0.4.6
 pyaudio>=0.2.13
 
+# Web UI (Gradio demo)
+gradio>=4.0.0
+pillow>=9.0.0
+
 # Optional: if using wandb for experiment tracking
 # wandb>=0.15.0
 
