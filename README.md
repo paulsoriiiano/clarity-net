@@ -162,14 +162,6 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Download DNS Challenge Dataset
-
-```bash
-bash scripts/download_dns.sh
-```
-
-Or manually download from [DNS Challenge](https://github.com/microsoft/DNS-Challenge) and organize into `data/raw/`.
-
 ---
 
 ## 💻 Usage
