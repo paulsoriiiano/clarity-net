@@ -1,0 +1,54 @@
+experiment_name: final_fullsubnet_sisnr
+description: Final FullSubNet training config selected from ablations with SI-SNR loss
+seed: 42
+
+model:
+  n_fft: 512
+  hop_length: 128
+  win_length: 512
+  num_freqs: 257
+  freq_cutoffs: [16, 96]
+  sb_num_center_freqs: [1, 4, 8]
+  sb_num_neighbor_freqs: [7, 7, 7]
+  fb_num_center_freqs: [1, 4, 8]
+  fb_num_neighbor_freqs: [7, 7, 7]
+  fb_hidden_size: 512
+  sb_hidden_size: 384
+  sequence_model: LSTM
+  dropout: 0.2
+  norm_type: cumulative_laplace_norm
+
+training:
+  epochs: 40
+  batch_size: 8
+  learning_rate: 0.0003
+  weight_decay: 1.0e-05
+  patience: 10
+  gradient_clip: 5.0
+  augmentation_factor: 5
+  eval_pairs: 3
+  seed: 42
+  loss:
+    name: sisnr
+    selection_metric: unseen_pesq
+    save_best_by:
+      - seen_loss
+      - unseen_pesq
+
+data:
+  train_snr_range: [-5, 20]
+  use_snr_curriculum: false
+  snr_curriculum: null
+  augmentation_factor: 5
+  eval_pairs: 3
+
+notes:
+  selected_from:
+    sequence_model: LSTM
+    dropout: 0.2
+    norm_type: cumulative_laplace_norm
+    loss_name: sisnr
+    training_regime: fixed_snr_neg5_20
+  rationale:
+    - "Primary selection criterion is best unseen validation PESQ."
+    - "Generalization gap is used as a secondary diagnostic, not the sole selection criterion."
