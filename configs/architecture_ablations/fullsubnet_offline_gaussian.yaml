@@ -20,7 +20,7 @@ model:
   fb_hidden_size: 512
   sb_hidden_size: 384
   sequence_model: LSTM
-  dropout: 0.0
+  dropout: 0.2
   fb_output_activate_function: false
   sb_output_activate_function: false
   norm_type: offline_gaussian_norm
