@@ -324,15 +324,33 @@ See `project_structure.txt` for full details.
 
 ---
 
-## 📊 Results (To Be Updated)
+## 📊 Results 
 
-| Model | Seen PESQ | Unseen PESQ | Generalization Gap |
-|-------|-----------|-------------|--------------------|
-| Baseline CNN | TBD | TBD | TBD |
-| DCCRN | TBD | TBD | TBD |
-| FullSubNet (MSE loss) | TBD | TBD | TBD |
-| FullSubNet (SI-SNR loss) | TBD | TBD | TBD |
-| FullSubNet + Architecture Ablations | TBD | TBD | TBD |
+### Preliminary Model Comparison
+
+| Model          | PESQ ↑ Seen | PESQ ↑ Unseen | STOI ↑ Seen | STOI ↑ Unseen | SI-SNR ↑ Seen | SI-SNR ↑ Unseen |
+| -------------- | ----------: | ------------: | ----------: | ------------: | ------------: | --------------: |
+| U-Net CNN      |       2.835 |         2.396 |       0.933 |         0.909 |        18.642 |          14.905 |
+| DCCRN          |       2.669 |         2.274 |       0.937 |         0.911 |        17.169 |          12.307 |
+| **FullSubNet** |   **3.292** |     **2.661** |   **0.956** |     **0.930** |    **21.814** |      **16.059** |
+| FullSubNet+    |       2.640 |         2.276 |       0.920 |         0.899 |        18.236 |          13.588 |
+
+### Loss Functions Ablation
+| Loss        | PESQ ↑ Seen | PESQ ↑ Unseen | STOI ↑ Seen | STOI ↑ Unseen | SI-SNR ↑ Seen | SI-SNR ↑ Unseen |
+| ----------- | --------: | ----------: | --------: | ----------: | ----------: | ------------: |
+| SI-SNR      |     2.933 |       2.626 |     0.936 |       0.937 |      19.273 |        15.295 |
+| Mag L1      |     3.091 |       2.604 |     0.946 |       0.939 |     -11.582 |       -11.973 |
+| Wav L1      |     2.975 |       2.571 |     0.942 |       0.939 |      19.862 |        15.364 |
+| Complex MSE |     2.934 |       2.593 |     0.937 |       0.934 |      18.349 |        14.639 |
+| Mag MSE     |     2.814 |       2.542 |     0.935 |       0.933 |      -6.230 |        -6.881 |
+
+### Baseline Model vs Final Model
+| Metric | Baseline Seen | Final Seen | Baseline Unseen | Final Unseen |
+| ------ | ------------: | ---------: | --------------: | -----------: |
+| MSE    |      0.000018 |   0.005171 |        0.000058 |     0.005177 |
+| PESQ   |         3.292 |      3.104 |           2.661 |        2.483 |
+| STOI   |         0.956 |      0.936 |           0.930 |        0.905 |
+| SI-SNR |        21.814 |     20.193 |          16.059 |       13.828 |
 
 Full results breakdown by ESC-50 noise category and architecture variant available in `results/`.
 
@@ -362,7 +380,7 @@ Full results breakdown by ESC-50 noise category and architecture variant availab
 
 ## 🎥 Demo
 
-[Link to demonstration video will be added here]
+[Watch Demo Video Here](https://drive.google.com/file/d/1BcBj1uVOjc8zlKIRAMRN7XBHWfAjogAj/view?usp=sharing)
 
 ---
 
@@ -399,7 +417,7 @@ MIT License — see `LICENSE` file for details.
 
 ## 📧 Contact
 
-**Your Name**  
+**Paul Junver Soriano**  
 Email: pauljunversoriano@gmail.com 
 LinkedIn: [Paul Junver Soriano](https://linkedin.com/in/paul-junver-soriano)
 
